@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Thiago Barradas</Authors>
+    <Description>SqlClient easy parser to object with nested complex object for .NET Core.</Description>
+    <PackageTags>sqlclient, parser, object, nested, complex, dapper, native, core2, core3, sql, orm</PackageTags>
+    <RepositoryUrl>https://github.com/ThiagoBarradas/sqlclient-parsetoobject</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/ThiagoBarradas/sqlclient-parsetoobject/blob/master/LICENSE</PackageLicenseUrl>
+    <Company></Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://api.nuget.org/v3-flatcontainer/microsoft.data.sqlclient/1.1.1/icon</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/ThiagoBarradas/sqlclient-parsetoobject</PackageProjectUrl>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  
+</Project>
