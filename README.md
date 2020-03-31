@@ -10,13 +10,6 @@ PM> Install-Package SqlClient.ParseToObject
 
 ## How to use
 
-Packages:
-```
-Install-Package Microsoft.Data.SqlClient 
-Install-Package Dapper 
-Install-Package SqlClient.ParseToObject 
-```
-
 Optional Packages (to run next code):
 ```
 Install-Package Dapper 
