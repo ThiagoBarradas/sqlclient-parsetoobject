@@ -10,11 +10,9 @@ namespace System.Data
         public static List<T> GetResults<T>(this IDataReader reader)
         {
             Type returnType = typeof(T);
-
             PropertyInfo[] returnTypeProperties = returnType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-            DataTable schemaTable = reader.GetSchemaTable();
-
+            DataTable schemaTable = null;
             List<T> returnCollection = new List<T>();
 
             TaskFactory taskFactory = new TaskFactory();
@@ -31,7 +29,15 @@ namespace System.Data
                         continue;
                     }
 
-                    returnInstance = (T)Convert.ChangeType(reader[0], returnType);
+                    if (returnType.GetTypeInfo().IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        returnInstance = (T)reader[0];
+                    }
+                    else
+                    {
+                        returnInstance = (T)Convert.ChangeType(reader[0], returnType);
+                    }
+
                     returnCollection.Add(returnInstance);
                 }
                 else
@@ -52,7 +58,12 @@ namespace System.Data
 
                         for (int i = 0; i < columns.Count; i++)
                         {
-                            if (columns[i].Value == DBNull.Value || columns[i].Value == null) { continue; }
+
+                            if (columns[i].Value == DBNull.Value || columns[i].Value == null)
+                            {
+                                continue;
+                            }
+
                             ParseProperty(returnType, returnTypeProperties, schemaTable, returnInstance, columns[i].Key, columns[i].Value, i, mappedProperties);
                         }
                     });
@@ -66,14 +77,14 @@ namespace System.Data
             return returnCollection;
         }
 
-        private static bool ParseProperty(Type returnType, PropertyInfo[] returnTypeProperties, DataTable schemaTable, object returnInstance, string columnName, object databaseValue, int ordinal, IList<string> mappedProperties)
+        public static bool ParseProperty(Type returnType, PropertyInfo[] returnTypeProperties, DataTable schemaTable, object returnInstance, string columnName, object databaseValue, int ordinal, IList<string> mappedProperties)
         {
-            if (databaseValue == null) { return false; }
+            if (databaseValue == null)
+            {
+                return false;
+            }
 
-            DataRow dataRow = schemaTable.Select("ColumnName = '" + columnName + "' AND ColumnOrdinal = " + ordinal).FirstOrDefault();
-
-            string tableName = (dataRow != null) ? dataRow["BaseTableName"].ToString() : null;
-
+            string tableName = null;
             PropertyInfo propertyInfo = null;
 
             string explicitClassName = null;
@@ -88,22 +99,19 @@ namespace System.Data
             }
 
             string propertyName = explicitPropertyName ?? columnName;
-
             string memberName = explicitClassName ?? propertyName;
 
-            if (string.IsNullOrWhiteSpace(explicitClassName) == true)
+            if (string.IsNullOrWhiteSpace(tableName) == true)
             {
-                if (mappedProperties.Contains(returnType.Name + "." + propertyName) == true)
-                {
-                    return true;
-                }
+                tableName = explicitClassName;
             }
-
-            if (string.IsNullOrWhiteSpace(tableName) == true) { tableName = explicitClassName; }
 
             if (propertyInfo == null)
             {
-                propertyInfo = returnTypeProperties.FirstOrDefault(p => (p.Name.Equals(tableName, StringComparison.OrdinalIgnoreCase) || p.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase)) && p.PropertyType.FullName.IndexOf("System.") < 0 && p.PropertyType.IsEnum == false);
+                propertyInfo = returnTypeProperties.FirstOrDefault(p =>
+                    (p.Name.Equals(tableName, StringComparison.OrdinalIgnoreCase) || p.Name.Equals(memberName, StringComparison.OrdinalIgnoreCase)) &&
+                    p.PropertyType.FullName.IndexOf("System.") < 0 &&
+                    p.PropertyType.GetTypeInfo().IsEnum == false);
 
                 if (propertyInfo != null)
                 {
@@ -116,6 +124,7 @@ namespace System.Data
                     if (ParseProperty(subPropertyType, subPropertyTypeProperties, schemaTable, subPropertyInstance, propertyName ?? columnName, databaseValue, ordinal, mappedProperties) == true)
                     {
                         propertyInfo.SetValue(returnInstance, subPropertyInstance, null);
+
                         return true;
                     }
                     else
@@ -138,17 +147,30 @@ namespace System.Data
             {
 
                 object value = databaseValue;
-                if (propertyInfo.PropertyType.IsEnum == true) { value = Enum.Parse(propertyInfo.PropertyType, databaseValue.ToString(), true); }
 
+                if (propertyInfo.PropertyType.GetTypeInfo().IsEnum == true)
+                {
+                    value = Enum.Parse(propertyInfo.PropertyType, databaseValue.ToString(), true);
+                }
                 else
                 {
-                    Type propertyType = (propertyInfo.PropertyType.IsGenericType == true) ? propertyInfo.PropertyType.GetGenericArguments()[0] : propertyInfo.PropertyType;
+                    Type propertyType = (propertyInfo.PropertyType.IsGenericParameter == true) ? propertyInfo.PropertyType.GetGenericArguments()[0] : propertyInfo.PropertyType;
 
-                    if (value.GetType() != propertyType) { value = Convert.ChangeType(value, propertyType); }
+                    if (value.GetType() != propertyType)
+                    {
+
+                        if (Nullable.GetUnderlyingType(propertyType) != null && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            value = Convert.ChangeType(value, Nullable.GetUnderlyingType(propertyType));
+                        }
+                        else
+                        {
+                            value = Convert.ChangeType(value, propertyType);
+                        }
+                    }
                 }
 
                 propertyInfo.SetValue(returnInstance, value, null);
-
                 mappedProperties.Add(returnType.Name + "." + propertyName);
             }
 

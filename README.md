@@ -1,3 +1,7 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/4s147x9kebkulw1r/branch/master?svg=true)](https://ci.appveyor.com/project/ThiagoBarradas/sqlclient-parsetoobject/branch/master)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/SqlClient.ParseToObject.svg)](https://www.nuget.org/packages/SqlClient.ParseToObject/)
+[![NuGet Version](https://img.shields.io/nuget/v/SqlClient.ParseToObject.svg)](https://www.nuget.org/packages/SqlClient.ParseToObject/)
+
 # SqlClient.ParseToObject
 
 Get a full object (with nested complex objects) from Microsoft.Data.SqlClient. Created with .NET Core support;
