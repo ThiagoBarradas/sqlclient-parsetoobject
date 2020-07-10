@@ -1,6 +1,6 @@
 [![Build Status](https://barradas.visualstudio.com/Contributions/_apis/build/status/NugetPackage/SqlClient%20ParseToObject?branchName=develop)](https://barradas.visualstudio.com/Contributions/_build/latest?definitionId=20&branchName=develop)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ThiagoBarradas_sqlclient-parsetoobject&metric=alert_status)](https://sonarcloud.io/dashboard?id=ThiagoBarradas_sqlclient-parsetoobject)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ThiagoBarradas_sqlclient-parsetoobject&metric=coverage)](https://sonarcloud.io/dashboard?id=ThiagoBarradas_sqlclient-parsetoobject)
+<!-- [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ThiagoBarradas_sqlclient-parsetoobject&metric=coverage)](https://sonarcloud.io/dashboard?id=ThiagoBarradas_sqlclient-parsetoobject) -->
 [![NuGet Downloads](https://img.shields.io/nuget/dt/SqlClient.ParseToObject.svg)](https://www.nuget.org/packages/SqlClient.ParseToObject/)
 [![NuGet Version](https://img.shields.io/nuget/v/SqlClient.ParseToObject.svg)](https://www.nuget.org/packages/SqlClient.ParseToObject/)
 
