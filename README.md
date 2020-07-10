@@ -1,4 +1,6 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/4s147x9kebkulw1r/branch/master?svg=true)](https://ci.appveyor.com/project/ThiagoBarradas/sqlclient-parsetoobject/branch/master)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ThiagoBarradas_sqlclient-parsetoobject&metric=alert_status)](https://sonarcloud.io/dashboard?id=ThiagoBarradas_sqlclient-parsetoobject)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ThiagoBarradas_sqlclient-parsetoobject&metric=coverage)](https://sonarcloud.io/dashboard?id=ThiagoBarradas_sqlclient-parsetoobject)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/SqlClient.ParseToObject.svg)](https://www.nuget.org/packages/SqlClient.ParseToObject/)
 [![NuGet Version](https://img.shields.io/nuget/v/SqlClient.ParseToObject.svg)](https://www.nuget.org/packages/SqlClient.ParseToObject/)
 
